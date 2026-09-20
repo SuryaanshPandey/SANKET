@@ -1,0 +1,51 @@
+{
+  "workflow_id": "WF-BRIDGE-001",
+  "version": "1.0.0",
+  "name": "Cross-Community Intermediary Investigation",
+  "description": "Deterministic workflow skeleton for identifying and reviewing bridge candidates.",
+  "nodes": [
+    {
+      "id": "time_30d",
+      "type": "TIME_FILTER",
+      "label": "Last 30 Days",
+      "config": {
+        "start": "2026-08-01T00:00:00+05:30",
+        "end": "2026-08-31T23:59:59+05:30"
+      },
+      "position": {"x": 80, "y": 180}
+    },
+    {
+      "id": "expand",
+      "type": "EXPAND_NETWORK",
+      "label": "Expand Network",
+      "config": {"depth": 2},
+      "position": {"x": 360, "y": 180}
+    },
+    {
+      "id": "bridges",
+      "type": "BRIDGE_ANALYSIS",
+      "label": "Find Bridges",
+      "config": {"minimum_cross_community_ratio": 0.5},
+      "position": {"x": 640, "y": 180}
+    },
+    {
+      "id": "review",
+      "type": "EVIDENCE_REVIEW",
+      "label": "Review Evidence",
+      "position": {"x": 920, "y": 180}
+    },
+    {
+      "id": "report",
+      "type": "REPORT",
+      "label": "Generate Report",
+      "config": {"title": "Bridge Analysis Report"},
+      "position": {"x": 1200, "y": 180}
+    }
+  ],
+  "edges": [
+    {"id": "edge-time-expand", "source_node_id": "time_30d", "target_node_id": "expand"},
+    {"id": "edge-expand-bridges", "source_node_id": "expand", "target_node_id": "bridges"},
+    {"id": "edge-bridges-review", "source_node_id": "bridges", "target_node_id": "review"},
+    {"id": "edge-review-report", "source_node_id": "review", "target_node_id": "report"}
+  ]
+}

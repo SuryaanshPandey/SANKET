@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clarity | Evidence-Grade Document Extraction Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <!-- Navigation Header -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="logo-mark">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <h1>CLARITY</h1>
+        <span class="subtext">FORENSIC EXTRACTION ENGINE</span>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="system-status-pill">
+        <span class="status-dot pulse"></span>
+        <span class="status-label">Qwen3-VL 8B</span>
+        <span class="status-divider">•</span>
+        <span class="status-mode">EVIDENTIARY AUDIT MODE</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="sample-dropdown-container">
+        <select id="select-sample-doc" class="btn btn-secondary" style="border-color: var(--accent-cyan); color: var(--accent-cyan); background: var(--bg-card); cursor: pointer;">
+          <option value="" disabled selected>📂 Load Police / Forensic Document ▼</option>
+          <option value="/api/v1/samples/fir">📋 1. FIR Report (Sec 154 CrPC)</option>
+          <option value="/api/v1/samples/seizure_memo">🔍 2. Seizure Memo / Panchnama (Sec 100/102)</option>
+          <option value="/api/v1/samples/arrest_memo">⚖️ 3. Arrest Memo (Sec 41B / D.K. Basu)</option>
+          <option value="/api/v1/samples/chargesheet">📑 4. Charge Sheet (Sec 173 CrPC / IIF-5)</option>
+          <option value="/api/v1/samples/medical_legal">🏥 5. Medico-Legal / Injury Report (MLC)</option>
+          <option value="/api/v1/samples/forensic_report">🔬 6. FSL Cyber 65B Certificate</option>
+          <option value="/api/v1/samples/invoice">🧾 7. Commercial Tax Invoice</option>
+        </select>
+      </div>
+      <button class="btn btn-secondary" id="btn-sample-fir" style="border-color: var(--accent-cyan); color: var(--accent-cyan);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        Quick FIR
+      </button>
+      <button class="btn btn-secondary" id="btn-sample">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+        </svg>
+        Quick Invoice
+      </button>
+      <label class="btn btn-primary" for="file-upload">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        Upload Evidence Photo
+      </label>
+      <input type="file" id="file-upload" accept="image/*" style="display: none;" />
+    </div>
+  </header>
+
+  <!-- Main Workbench Layout -->
+  <main class="workbench">
+    <!-- Left Column: Document Image & Bounding Box Viewer -->
+    <section class="viewer-column">
+      <div class="panel viewer-panel">
+        <div class="panel-toolbar">
+          <div class="view-toggles">
+            <button class="toggle-btn active" id="tab-preprocessed">Preprocessed (Clean)</button>
+            <button class="toggle-btn" id="tab-original">Pristine Original</button>
+          </div>
+          <div class="toolbar-stats" id="prep-metrics">
+            <span class="metric-pill">Deskew: <strong id="m-deskew">0.0°</strong></span>
+            <span class="metric-pill">CLAHE: <strong id="m-clahe">Active</strong></span>
+            <span class="metric-pill">Perspective: <strong id="m-persp">Warped</strong></span>
+          </div>
+        </div>
+
+        <!-- Document Canvas Viewport -->
+        <div class="canvas-viewport" id="viewport">
+          <div class="image-stage" id="stage">
+            <img id="doc-image" alt="Evidence Document" />
+            <div class="bbox-overlay" id="bbox-overlay"></div>
+          </div>
+          <div class="empty-state" id="empty-state">
+            <div class="empty-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+              </svg>
+            </div>
+            <h3>No Document Ingested</h3>
+            <p>Upload a document photo, angled mobile capture, or click <strong>Load Sample Invoice</strong> to begin.</p>
+          </div>
+        </div>
+
+        <!-- Progress Overlay during Pipeline Execution -->
+        <div class="pipeline-progress" id="pipeline-progress" style="display: none;">
+          <div class="progress-card">
+            <div class="spinner"></div>
+            <h4 id="progress-step-title">Ingesting Document...</h4>
+            <div class="progress-steps">
+              <div class="step-item active" id="step-hash">1. SHA-256 Hashing</div>
+              <div class="step-item" id="step-prep">2. OpenCV Preprocessing</div>
+              <div class="step-item" id="step-cls">3. VLM Classification</div>
+              <div class="step-item" id="step-vlm">4. Qwen3-VL Extraction</div>
+              <div class="step-item" id="step-val">5. Quality Gate Verification</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Column: Evidence Dossier & Audit Log -->
+    <aside class="dossier-column">
+      <div class="panel dossier-panel">
+        <div class="panel-header">
+          <h2>Evidence Dossier</h2>
+          <div class="dossier-actions">
+            <button class="icon-btn" id="btn-copy-json" title="Copy Raw JSON">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+            </button>
+            <button class="icon-btn" id="btn-download-json" title="Download Report">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="dossier-content" id="dossier-content">
+          <!-- Chain of Custody Metadata Card -->
+          <div class="custody-card">
+            <div class="custody-row">
+              <span class="label">Document ID</span>
+              <span class="mono-val" id="val-doc-id">--</span>
+            </div>
+            <div class="custody-row">
+              <span class="label">SHA-256 Hash</span>
+              <span class="mono-val hash-truncate" id="val-doc-hash" title="Click to copy">--</span>
+            </div>
+            <div class="custody-badges">
+              <span class="badge badge-type" id="badge-doc-type">UNKNOWN</span>
+              <span class="badge badge-confidence" id="badge-confidence">--% Confidence</span>
+              <span class="badge badge-status" id="badge-escalated">Single Pass</span>
+            </div>
+          </div>
+
+          <!-- Quality Gates & Arithmetic Validation -->
+          <div class="section-block">
+            <div class="section-title">
+              <span>Quality Gates & Validation</span>
+              <span class="status-indicator-icon" id="gate-icon">✓</span>
+            </div>
+            <div class="gate-card" id="gate-card">
+              <div class="gate-status" id="gate-status">Awaiting document extraction</div>
+              <ul class="flags-list" id="flags-list"></ul>
+            </div>
+          </div>
+
+          <!-- Extracted Fields by Category -->
+          <div class="section-block">
+            <div class="section-title">Extracted Entities & Bounding Boxes</div>
+            
+            <!-- Monetary Amounts -->
+            <div class="category-group">
+              <h4 class="category-header">Financial Amounts</h4>
+              <div class="field-list" id="list-amounts">
+                <div class="field-placeholder">No amounts extracted</div>
+              </div>
+            </div>
+
+            <!-- Dates -->
+            <div class="category-group">
+              <h4 class="category-header">Dates</h4>
+              <div class="field-list" id="list-dates">
+                <div class="field-placeholder">No dates extracted</div>
+              </div>
+            </div>
+
+            <!-- Parties -->
+            <div class="category-group">
+              <h4 class="category-header">Parties & Entities</h4>
+              <div class="field-list" id="list-parties">
+                <div class="field-placeholder">No parties extracted</div>
+              </div>
+            </div>
+
+            <!-- Identifiers -->
+            <div class="category-group">
+              <h4 class="category-header">Identifiers</h4>
+              <div class="field-list" id="list-identifiers">
+                <div class="field-placeholder">No identifiers extracted</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cryptographic Audit Log -->
+          <div class="section-block">
+            <div class="section-title">Chain-of-Custody Audit Trail</div>
+            <div class="audit-timeline" id="audit-timeline">
+              <div class="audit-placeholder">Audit logs will appear after processing</div>
+            </div>
+          </div>
+
+          <!-- Full Raw OCR Text -->
+          <div class="section-block">
+            <div class="section-title">Full Document Transcription</div>
+            <div class="raw-text-box" id="raw-text-box">
+              <pre id="val-raw-text">No text extracted.</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
