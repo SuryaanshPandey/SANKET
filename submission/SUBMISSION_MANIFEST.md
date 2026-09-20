@@ -2,46 +2,191 @@
 
 ## Project
 
-**Title:** SANKET — Case Memory & Investigation Workspace  
-**Problem Statement:** KAYA Software Hackathon PS #13 — AI-Powered Criminal Network Analysis System  
-**Release:** V1.10.6 + C3 Workflow Builder / Planner Reliability
+**Title:** SANKET — AI-Native Investigation Workspace
+**Problem Statement:** KAYA Software Hackathon PS #13 — AI-Powered Criminal Network Analysis System
+**Release:** V1.10.7
+**Validated Intelligence Baseline:** V1.10.6 + C4
 
-## Links to fill before submission
+## Submission Links
 
-| Item | Value |
-|---|---|
-| Public GitHub repository | `TBD` |
-| Demo video (≤ 5 min) | `TBD` |
-| Presentation PDF (≤ 10 slides) | `TBD` |
-| Hosted demo | `TBD / N/A` |
+| Item                     | Value                                     |
+| ------------------------ | ----------------------------------------- |
+| Public GitHub repository | https://github.com/SuryaanshPandey/SANKET |
+| Demo video (≤ 5 min)     | `TBD`                                     |
+| Presentation PDF         | `TBD`                                     |
+| Hosted demo              | `N/A`                                     |
 
-## Submission description
+## Submission Description
 
-SANKET is an AI-assisted investigation workspace that turns fragmented case evidence into a connected, traceable and time-aware case memory. It combines document extraction output, entity resolution, an evidence graph, temporal intelligence, graph analytics, anomaly/pattern detection and an investigator-controlled workflow canvas. A constrained AI planner converts natural-language investigation questions into validated workflows; the deterministic engine executes those workflows and returns evidence-backed analytical leads. Provenance, contradictions, uncertainty and human verification remain visible throughout the investigation.
+SANKET is an investigator-facing intelligence workspace that turns fragmented case evidence into a connected, traceable and time-aware case memory.
 
-## Security position
+It combines document extraction, Graph Contract normalization, entity resolution, an evidence graph, temporal intelligence, graph analytics, anomaly and pattern analysis, evidence review, and an investigator-controlled workflow engine.
 
-SANKET is an investigative decision-support prototype. It does not make automated guilt determinations or enforcement decisions. AI-generated workflow plans are schema-validated and allow-listed before execution. Evidence conflicts are preserved rather than silently reconciled.
+A constrained AI investigation planner converts natural-language questions into validated, allow-listed workflows. The deterministic workflow engine executes those workflows and produces evidence-backed analytical leads, provenance information, uncertainty notes and structured reports.
 
-## Data position
+The system is designed around one principle:
 
-Demo and benchmark scenarios are synthetic or controlled public-data validations. They must not be described as access to confidential law-enforcement datasets.
+> Important analytical conclusions should remain traceable to the evidence from which they were derived.
 
-## Final acceptance evidence
+## PS #13 Capability Coverage
 
-- Backend regression suite: run locally before submission.
-- Target-machine preflight: `python scripts/target_machine_preflight.py`
-- Deterministic acceptance: `python scripts/final_acceptance.py`
-- Frontend production build: `npm ci` then `npm run build`
-- Manual end-to-end case test: complete before recording.
+SANKET provides:
 
-## KAYA online submission note
+* multi-source evidence ingestion;
+* structured and unstructured information processing;
+* entity extraction and resolution;
+* relationship and network analysis;
+* temporal analysis;
+* key-individual and bridge analysis;
+* anomaly and unusual-activity detection;
+* investigator-facing network, timeline, location and evidence views;
+* configurable investigation workflows;
+* AI-assisted workflow planning;
+* evidence provenance;
+* contradiction and uncertainty handling;
+* human verification;
+* evidence-backed reporting.
 
-KAYA's current Software Hackathon page states that the online submission requires a public GitHub repository and a demo video of at most five minutes. The page also lists a 24 September 2026 submission deadline and describes innovation, technical depth/execution, security and real-world impact as judging dimensions.
+## Security Position
 
-Reference: https://kaya.azmth.in/events/hackathon/
+SANKET is an **investigative decision-support prototype**.
 
+It does not:
 
-## C3 delivery note
+* determine legal guilt;
+* make autonomous arrest or enforcement decisions;
+* silently resolve conflicting evidence;
+* treat AI-generated hypotheses as established facts;
+* permit unrestricted AI execution of arbitrary code, SQL or system commands.
 
-The final workflow demo should visibly include direct output-pin → input-pin connection, connection selection/deletion, AI planner → review → Apply to Canvas, workflow validation, deterministic execution and evidence-backed report export.
+AI-generated workflow plans are schema-validated and allow-listed before deterministic execution.
+
+## Data Position
+
+Demonstration and benchmark scenarios use controlled synthetic and/or public data.
+
+The repository does not claim access to confidential law-enforcement datasets.
+
+Police-style demonstration documents and other sample investigation material should be interpreted as project demonstration assets unless explicitly identified otherwise.
+
+Sample-data licensing and attribution are documented in:
+
+```text
+samples/LICENSES.md
+```
+
+## Validation Evidence
+
+The repository has been validated using the following gates:
+
+### Backend regression
+
+```powershell
+pytest -q
+```
+
+Validated baseline:
+
+```text
+149 tests passed
+```
+
+### Deterministic final acceptance
+
+```powershell
+python scripts/final_acceptance.py
+```
+
+Validated result:
+
+```text
+8 / 8 checks passed
+```
+
+The acceptance scenario validates temporal analysis, key-individual analysis, bridge analysis, anomaly coverage, workflow validation, workflow execution, evidence-backed reporting and reproducibility.
+
+### Frontend production build
+
+```powershell
+cd frontend
+npm ci
+npm run build
+```
+
+### Manual end-to-end validation
+
+Before final submission, the complete investigator workflow should be exercised from ingestion through reporting.
+
+## Recommended Demo Flow
+
+The demonstration should communicate one continuous investigation:
+
+```text
+Fragmented Evidence
+        ↓
+Connected Case Memory
+        ↓
+Entity Network + Timeline
+        ↓
+AI-Assisted Workflow
+        ↓
+Deterministic Execution
+        ↓
+Evidence Review
+        ↓
+Evidence-backed Report
+```
+
+The key capabilities to demonstrate are:
+
+1. Case ingestion and memory formation
+2. Entity Network exploration
+3. Temporal / location analysis
+4. Investigation Workflow
+5. AI plan review and application
+6. Evidence and provenance inspection
+7. Contradiction / human-review flow
+8. Evidence-backed report generation
+
+## Submission Checklist
+
+Before submitting:
+
+* [ ] Public GitHub repository is accessible
+* [ ] README accurately describes V1.10.7
+* [ ] Demo video is no longer than the required submission limit
+* [ ] Demo video shows a complete working investigation flow
+* [ ] Presentation is consistent with the repository
+* [ ] No secrets or runtime databases are committed
+* [ ] Sample-data licensing is documented
+* [ ] Backend tests pass
+* [ ] Deterministic final acceptance passes
+* [ ] Frontend production build passes
+* [ ] Manual end-to-end demo has been completed
+* [ ] Submission links have been filled
+* [ ] KAYA participant dashboard requirements have been rechecked immediately before submission
+
+## Repository Documentation
+
+Key technical documentation is available under:
+
+```text
+docs/
+```
+
+including:
+
+```text
+docs/INVESTIGATION_WORKFLOW_ENGINE.md
+docs/EVIDENCE_GRAPH.md
+docs/ENTITY_RESOLUTION.md
+docs/TEMPORAL_ENGINE.md
+docs/GRAPH_ANALYTICS.md
+docs/FINALIZATION_AND_DEMO.md
+```
+
+Historical release notes are preserved under:
+
+```text
+docs/releases/
+```
