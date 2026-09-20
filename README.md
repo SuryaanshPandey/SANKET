@@ -686,14 +686,4 @@ The repository is maintained as a competition submission and demonstration codeb
 
 ## License
 
-This repository's software license is defined in:
-
-```text
-LICENSE
-```
-
-Sample-data licensing and attribution are documented separately in:
-
-```text
-samples/LICENSES.md
-```
+No open-source license has been declared for this repository.
