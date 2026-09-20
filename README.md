@@ -683,3 +683,8 @@ V1.10.7 is the current case-memory presentation and frontend information-archite
 The repository is maintained as a competition submission and demonstration codebase. Historical release notes remain available under `docs/releases/` for engineering traceability.
 
 ---
+---
+
+## License
+
+No open-source license has been declared for this repository.
